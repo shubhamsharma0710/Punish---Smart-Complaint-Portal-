@@ -7,17 +7,17 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwt: JwtService,
+    private jwtService: JwtService,
   ) {}
 
   async signup(data: any) {
-    const hashed = await bcrypt.hash(data.password, 10);
+    const hashedPassword = await bcrypt.hash(data.password, 10);
 
     return this.prisma.user.create({
       data: {
         name: data.name,
         email: data.email,
-        password: hashed,
+        password: hashedPassword,
         roleId: data.roleId,
       },
     });
@@ -28,14 +28,24 @@ export class AuthService {
       where: { email: data.email },
     });
 
-    if (!user) throw new Error('User not found');
+    if (!user) {
+      throw new Error('User not found');
+    }
 
-    const valid = await bcrypt.compare(data.password, user.password);
+    const isMatch = await bcrypt.compare(data.password, user.password);
 
-    if (!valid) throw new Error('Invalid password');
+    if (!isMatch) {
+      throw new Error('Invalid credentials');
+    }
 
-    const token = this.jwt.sign({ userId: user.id });
+    const token = this.jwtService.sign({
+      id: user.id,
+      email: user.email,
+    });
 
-    return { token };
+    return {
+      token,
+      user,
+    };
   }
 }
