@@ -1,159 +1,189 @@
-﻿# Punish---Smart-Complaint-Portal-
-# Smart Complaint Portal – Backend
+# Smart Complaint Portal
 
 ## Overview
 
-This project is a backend system for a complaint management application built using NestJS, Prisma ORM, and PostgreSQL. It supports two roles: consumers and reviewers. Consumers can create and manage complaints, while reviewers can view, comment on, and resolve them.
-
----
-
-## Tech Stack
-
-* NestJS (Backend Framework)
-* PostgreSQL (Database)
-* Prisma ORM
-* JWT Authentication
-* TypeScript
+Smart Complaint Portal is a full-stack web application designed to register, track, and resolve complaints related to a company or service. The platform supports two roles: Consumer and Reviewer, enabling structured communication and resolution of issues.
 
 ---
 
 ## Features
 
-* User authentication (signup and login)
-* Role-based system (consumer and reviewer)
-* Complaint creation and management
-* Reviewer assignment to complaints
-* Complaint status tracking (PENDING / RESOLVED)
-* Comment system for communication
-* Filter complaints by status
-* View complaints by user
+### Authentication
+
+* User signup and login
+* Secure password hashing using bcrypt
+* JWT-based authentication
+
+### Role-Based Access
+
+* Consumer
+
+  * Create complaints
+  * Delete own complaints
+  * Add comments
+* Reviewer
+
+  * View all complaints
+  * Assign complaints
+  * Mark complaints as resolved
+  * Add comments
+
+### Complaint Management
+
+* Create, view, and delete complaints
+* Status tracking (Pending / Resolved)
+* Reviewer assignment
+
+### Comment System
+
+* Two-way communication between consumer and reviewer
+* Comments linked to complaints
+
+---
+
+## Tech Stack
+
+### Frontend
+
+* React (TypeScript)
+* Tailwind CSS
+* Axios
+
+### Backend
+
+* NestJS
+* Prisma ORM
+* PostgreSQL
 
 ---
 
 ## Project Structure
 
 ```
-src/
- ├── auth/
- ├── users/
- ├── roles/
- ├── complaints/
- ├── comments/
- ├── prisma/
- └── main.ts
+smart-complaint-portal/
+│
+├── smart-complaint-backend/
+│   ├── src/
+│   ├── prisma/
+│   └── package.json
+│
+├── smart-complaint-frontend/
+│   ├── src/
+│   └── package.json
+│
+└── README.md
 ```
 
 ---
 
 ## Setup Instructions
 
-### 1. Clone Repository
+### Backend Setup
+
+1. Navigate to backend folder
 
 ```
-git clone <repository-url>
 cd smart-complaint-backend
 ```
 
-### 2. Install Dependencies
+2. Install dependencies
 
 ```
 npm install
 ```
 
-### 3. Configure Environment Variables
-
-Create a `.env` file in the root directory:
+3. Setup environment variables (.env)
 
 ```
-DATABASE_URL=postgresql://postgres:1234@localhost:5432/complaint_db
+DATABASE_URL=your_database_url
+JWT_SECRET=your_secret
 ```
 
-### 4. Setup Database
-
-* Install PostgreSQL
-* Create a database named:
-
-```
-complaint_db
-```
-
-### 5. Run Prisma
+4. Run migrations
 
 ```
 npx prisma migrate dev
-npx prisma generate
 ```
 
-### 6. Start Server
+5. Start server
 
 ```
 npm run start:dev
 ```
 
-Server will run at:
+---
+
+### Frontend Setup
+
+1. Navigate to frontend folder
 
 ```
-http://localhost:3000
+cd smart-complaint-frontend
+```
+
+2. Install dependencies
+
+```
+npm install
+```
+
+3. Start frontend
+
+```
+npm run dev
 ```
 
 ---
 
 ## API Endpoints
 
-### Authentication
+### Auth
 
-POST /auth/signup
-POST /auth/login
-
-### Roles
-
-GET /roles
+* POST /auth/signup
+* POST /auth/login
 
 ### Complaints
 
-POST /complaints
-GET /complaints
-GET /complaints?status=PENDING
-GET /complaints?status=RESOLVED
-GET /complaints/user/:id
-PATCH /complaints/:id/assign
-PATCH /complaints/:id/resolve
-DELETE /complaints/:id/:userId
+* POST /complaints
+* GET /complaints
+* PATCH /complaints/:id/assign
+* PATCH /complaints/:id/resolve
+* DELETE /complaints/:id/:userId
 
 ### Comments
 
-POST /comments
-GET /comments/:complaintId
+* POST /comments
+* GET /comments/:complaintId
 
 ---
 
-## Roles
+## Working Flow
 
-| ID | Role     |
-| -- | -------- |
-| 1  | CONSUMER |
-| 2  | REVIEWER |
-
----
-
-## Usage Flow
-
-1. User registers and logs in
+1. Consumer signs up and logs in
 2. Consumer creates a complaint
-3. Reviewer views complaints
-4. Reviewer assigns themselves or is assigned
-5. Reviewer comments on complaint
-6. Reviewer marks complaint as resolved
-7. Consumer can view or delete their complaint
+3. Reviewer logs in and views all complaints
+4. Reviewer assigns or resolves complaints
+5. Both parties communicate through comments
 
 ---
 
-## Notes
+## Key Highlights
 
-* Ensure PostgreSQL is running before starting the server
-* Verify DATABASE_URL is correct in `.env`
-* Use JSON format in API requests
-* Use valid IDs for users and complaints
+* Role-based access control
+* Secure authentication system
+* Relational database with Prisma
+* Clean and responsive UI using Tailwind
+* RESTful API architecture
+
+---
+
+## Future Improvements
+
+* JWT-based route protection
+* Filter complaints by status
+* Pagination and search
+* Notifications system
+* Deployment (Docker / Cloud)
 
 ---
 
@@ -161,10 +191,6 @@ GET /comments/:complaintId
 
 Shubham Sharma
 B.Tech Computer Science
-GitHub: https://github.com/shubhamsharma0710
+Frontend & Backend Developer
 
 ---
-
-## License
-
-This project is intended for learning and internship purposes.
