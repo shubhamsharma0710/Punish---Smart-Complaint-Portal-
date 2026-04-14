@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: complaint_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./smart-complaint-backend
+    container_name: backend
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/complaint_db
+      JWT_SECRET: secretKey
+    command: sh -c "npx prisma migrate dev && npm run start:dev"
+
+  frontend:
+    build: ./smart-complaint-frontend
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
